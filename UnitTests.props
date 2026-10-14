@@ -1,0 +1,66 @@
+﻿<Project>
+
+  <!-- Общее для юнит-тестов прикладной: пакеты, ссылки на сборки прикладных модулей, веб-сервера и библиотек, мок-платформа. -->
+  <!-- Подключается в *Unit.Tests.csproj через <Import Project="$(UnitTestsPropsPath)" />. -->
+
+  <!-- Защита от случайных падений тестов со стабами MockFunctionStubs. -->
+  <!-- Стаб подменяет настоящий метод на лету через библиотеку Harmony. Но .NET во время работы тестов -->
+  <!-- может перекомпилировать часто вызываемый метод в более быструю версию, и в новой версии подмены уже нет. -->
+  <!-- Тогда вызывается настоящий метод, и тест падает. Это случается редко, примерно в 1-3 прогонах из 100, -->
+  <!-- поэтому тест выглядит «плавающим»: то падает, то нет. -->
+  <!-- Настройка ниже говорит .NET: первый час работы такие перекомпиляции не делать. -->
+  <!-- Тесты одной сборки идут секунды, так что перекомпиляций не будет совсем. -->
+  <!-- Как настройка доходит до тестов: при сборке проекта .NET сам записывает её в файл -->
+  <!-- bin\Debug\<ИмяСборки>.runtimeconfig.json, а при запуске тестов читает её оттуда. -->
+  <!-- Поэтому она работает везде: в чекапе, на стендах и в IDE. -->
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Runtime.TieredCompilation.CallCountingDelayMs" Value="3600000" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+  <!-- Сборки прикладных модулей и веб-сервера. -->
+  <!-- ClientBase подключается под extern alias: его типы пересекаются с остальными сборками LibWebServer. -->
+  <!-- $(ExcludedAppliedModules) задаётся в проекте до этого импорта, если модуль нужно подключить самому, например под своим alias. -->
+  <ItemGroup>
+    <Reference Include="$(AppliedModulesPath)\*.dll" Exclude="$(ExcludedAppliedModules)" />
+    <Reference Include="$(LibWebServerPath)\*.dll"
+               Exclude="$(LibWebServerPath)\*IsolatedArea*.dll;$(LibWebServerPath)\*ClientBase.dll" />
+    <Reference Include="$(LibWebServerPath)\*ClientBase.dll">
+      <Aliases>ClientBase</Aliases>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(MockPlatformProjectPath)" />
+  </ItemGroup>
+
+  <!-- Внешние сборки прикладной из подпапок <Модуль>.Libraries папки прикладной. -->
+  <!-- Подключаются per-library wildcard-ом, чтобы DLL с одинаковым именем, лежащие в разных модулях, не приводили к CS1703. -->
+  <!-- Одноимённые DLL из разных модулей (DCX в Exchange/ExchangeCore, FormalizeDocumentsParser в Docflow/FinancialArchive/PowerOfAttorneyCore) -->
+  <!-- совпадают побайтово, поэтому в списке присутствует только одна копия каждой. -->
+  <ItemGroup>
+    <Reference Include="$(AppliedModulesPath)\Sungero.Commons.Libraries\ElasticsearchExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.Company.Libraries\IdentityServiceExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.Docflow.Libraries\ArioExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.ExchangeCore.Libraries\DCX\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.FinancialArchive.Libraries\FDP\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.GenAIProcessing.Libraries\GenAIProcessingExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.IntegrationAIAgent.Libraries\IntegrationAIExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.Notifications.Libraries\MessageBrokerExtensions\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.Parties.Libraries\CompanyData\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.Parties.Libraries\PhoneNumbers\*.dll" />
+    <Reference Include="$(AppliedModulesPath)\Sungero.PowerOfAttorneyCore.Libraries\PowerOfAttorneyServiceExtensions\*.dll" />
+  </ItemGroup>
+
+</Project>

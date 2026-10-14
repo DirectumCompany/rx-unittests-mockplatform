@@ -1,0 +1,40 @@
+<Project>
+
+  <!-- Пути до сборок. Указать перед первой сборкой. -->
+  <PropertyGroup>
+    <!-- Путь до платформенных сборок веб-сервера, например C:\Libs\WebServer. -->
+    <LibWebServerPath></LibWebServerPath>
+
+    <!-- Путь до прикладных сборок, например C:\Libs\Applied. -->
+    <AppliedModulesPath></AppliedModulesPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Общее для тестовых проектов. Подключается в csproj через <Import Project="$(UnitTestsPropsPath)" />. -->
+    <UnitTestsPropsPath>$(MSBuildThisFileDirectory)UnitTests.props</UnitTestsPropsPath>
+    <MockPlatformProjectPath>$(MSBuildThisFileDirectory)src\MockPlatform\MockPlatform.csproj</MockPlatformProjectPath>
+  </PropertyGroup>
+
+  <!-- Сборки веб-сервера используют библиотеки ASP.NET Core, которых нет в папке веб-сервера. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <!-- Убрать из ссылок DLL веб-сервера, которые не являются управляемыми сборками. -->
+  <Target Name="RemoveNativeLibReferences" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <NativeLib Include="sni;harfbuzz;libHarfBuzzSharp;libSkiaSharp;aspose.slides.drawing.capi_vc14x64;Magick.Native-Q8-x64;WindowsBase" />
+      <Reference Remove="@(NativeLib->'$(LibWebServerPath)\%(Identity).dll')" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Остановить сборку с понятной ошибкой, если пути не указаны. -->
+  <Target Name="CheckLibPaths" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <MissingLibPath Include="LibWebServerPath (путь до платформенных сборок веб-сервера)" Condition="'$(LibWebServerPath)' == ''" />
+      <MissingLibPath Include="AppliedModulesPath (путь до прикладных сборок)" Condition="'$(AppliedModulesPath)' == ''" />
+    </ItemGroup>
+    <Error Condition="'@(MissingLibPath)' != ''" Text="В Directory.Build.props не указаны: @(MissingLibPath, ', ')." />
+  </Target>
+
+</Project>
