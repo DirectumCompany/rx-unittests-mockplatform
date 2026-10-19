@@ -108,8 +108,8 @@ public class IsExcludedAuthProtocolForExternalApps
   }
 
   private static IDisposable MockExcludedProtocolsParameter(string? value)
-    => MockFunctionStubs.Setup<Sungero.Commons.Server.ModuleFunctions>(
-      nameof(Sungero.Commons.Server.ModuleFunctions.GetNullableParameterStringValue), (string _) => value);
+    => MockFunctionStubs.Setup<Sungero.Docflow.Server.ModuleFunctions>(
+      nameof(Sungero.Docflow.Server.ModuleFunctions.GetDocflowParamsStringValue), (string _) => value);
 
   #endregion
 }

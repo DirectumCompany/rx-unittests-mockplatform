@@ -356,8 +356,8 @@ namespace UnitTests.Company.EntityActions.UserBase
       userBase.IsWorkingInWebClient = true;
 
       // Act
-      var actions = new UserBaseCollectionBulkActions();
-      actions.SetEntityIds([new EntityIdentifier(userBase)]);
+      var actions = new UserBaseCollectionActions();
+      actions.SetEntities([userBase]);
       var args = new ExecuteActionArgs(FormType.Collection, null);
       actions.DisableUsersWorkInWebClient(args);
 

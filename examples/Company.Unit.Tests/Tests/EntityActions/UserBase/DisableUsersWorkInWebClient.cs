@@ -33,8 +33,8 @@ namespace UnitTests.Company.UserBaseActions
       userBase.IsWorkingInWebClient = false;
 
       // Act
-      var actions = new UserBaseCollectionBulkActions();
-      actions.SetEntityIds([new EntityIdentifier(userBase)]);
+      var actions = new UserBaseCollectionActions();
+      actions.SetEntities([userBase]);
       var args = new ExecuteActionArgs(FormType.Collection, null);
       actions.DisableUsersWorkInWebClient(args);
 
@@ -51,8 +51,8 @@ namespace UnitTests.Company.UserBaseActions
       userBase.IsWorkingInWebClient = true;
 
       // Act
-      var actions = new UserBaseCollectionBulkActions();
-      actions.SetEntityIds([new EntityIdentifier(userBase)]);
+      var actions = new UserBaseCollectionActions();
+      actions.SetEntities([userBase]);
       var args = new ExecuteActionArgs(FormType.Collection, null);
       actions.DisableUsersWorkInWebClient(args);
 
