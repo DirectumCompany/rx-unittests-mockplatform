@@ -25,20 +25,19 @@ namespace MockPlatform.Stubs
     {
       MockFunctionStubs.RestoreOriginalCodeFromIL<Sungero.Docflow.Server.ModuleInitializer>(
         nameof(Sungero.Docflow.Server.ModuleInitializer.CreateDocumentKind),
-        typeof(Sungero.Docflow.Structures.Module.IDocumentKindModel),
-        typeof(Sungero.Domain.Shared.IActionInfo[]));
-    }
-
-    /// <summary>
-    /// Пересобрать ModuleInitializer.SetDocumentKindDefaultNameFormat из исходного IL, чтобы стаб на GetExternalLink
-    /// снова перехватывался, даже если JIT ранее заинлайнил его вызов внутрь SetDocumentKindDefaultNameFormat.
-    /// </summary>
-    public static void RestoreSetDocumentKindDefaultNameFormatFromIL()
-    {
-      MockFunctionStubs.RestoreOriginalCodeFromIL<Sungero.Docflow.Server.ModuleInitializer>(
-        nameof(Sungero.Docflow.Server.ModuleInitializer.SetDocumentKindDefaultNameFormat),
+        typeof(string),
+        typeof(string),
+        typeof(Sungero.Core.Enumeration),
+        typeof(Sungero.Core.Enumeration),
+        typeof(bool),
+        typeof(bool),
         typeof(Guid),
-        typeof(string));
+        typeof(Sungero.Domain.Shared.IActionInfo[]),
+        typeof(bool),
+        typeof(bool),
+        typeof(Guid),
+        typeof(bool),
+        typeof(Sungero.Docflow.IMediumType));
     }
   }
 }

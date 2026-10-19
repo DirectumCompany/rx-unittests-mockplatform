@@ -1,4 +1,5 @@
-﻿using CommonLibrary;
+﻿using System;
+using CommonLibrary;
 using MockPlatform.Core;
 using Sungero.Domain.Shared;
 
@@ -9,9 +10,15 @@ public class LockInfoImplementer : ILockInfoImplementer, IMockable<ILockInfoImpl
   public LocalizedString GetLockedMessage(LockInfo lockInfo)
     => IMockable<ILockInfoImplementer>.Mock?.GetLockedMessage(lockInfo) ?? new LocalizedString();
 
-  public bool IsLockedByMe(LockInfo lockInfo)
-    => IMockable<ILockInfoImplementer>.Mock?.IsLockedByMe(lockInfo) ?? false;
+  public bool LockedByMe(long loginId)
+    => IMockable<ILockInfoImplementer>.Mock?.LockedByMe(loginId) ?? false;
 
-  public string GetLoginName(long loginId)
-    => IMockable<ILockInfoImplementer>.Mock?.GetLoginName(loginId) ?? string.Empty;
+  public bool LockedByMe(Guid sessionId, string complexTraceId)
+    => IMockable<ILockInfoImplementer>.Mock?.LockedByMe(sessionId, complexTraceId) ?? false;
+
+  public bool LockedByOther(long loginId)
+    => IMockable<ILockInfoImplementer>.Mock?.LockedByOther(loginId) ?? false;
+
+  public bool LockedByOther(Guid sessionId, string complexTraceId)
+    => IMockable<ILockInfoImplementer>.Mock?.LockedByOther(sessionId, complexTraceId) ?? false;
 }

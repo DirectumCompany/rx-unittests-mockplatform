@@ -9,16 +9,13 @@ public class LocksImplementer : ILocksImplementer, IMockable<ILocksImplementer>
     => IMockable<ILocksImplementer>.Mock?.GetCurrentUserLocksInfoByEntityType(typeId) ?? [];
 
   public LockInfo GetLockInfo(IEntity entity)
-    => IMockable<ILocksImplementer>.Mock?.GetLockInfo(entity) ?? LockInfoFactory.Empty;
+    => IMockable<ILocksImplementer>.Mock?.GetLockInfo(entity) ?? new LockInfo();
 
   public LockInfo GetLockInfo(IBinaryData body)
-    => IMockable<ILocksImplementer>.Mock?.GetLockInfo(body) ?? LockInfoFactory.Empty;
+    => IMockable<ILocksImplementer>.Mock?.GetLockInfo(body) ?? new LockInfo();
 
   public void Lock(IEntity entity, bool isPermanent)
     => IMockable<ILocksImplementer>.Mock?.Lock(entity, isPermanent);
-
-  public void Lock(IEntity entity, bool isPermanent, bool isExplicit)
-    => IMockable<ILocksImplementer>.Mock?.Lock(entity, isPermanent, isExplicit);
 
   public void Lock(EntityIdentifier entityIdentifier, bool isPermanent)
     => IMockable<ILocksImplementer>.Mock?.Lock(entityIdentifier, isPermanent);
