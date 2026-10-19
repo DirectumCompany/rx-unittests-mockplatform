@@ -7,33 +7,33 @@
 ```csharp
 using Sungero.Domain.Shared;
 
-namespace UnitTests.Commons.GenAIServiceSharedFunctions;
+namespace UnitTests.Commons.ModuleSharedFunctions;
 
-public class ValidateServiceUrl
+public class IsEmailFormatMatch
 {
   [Test]
-  [Description("URL с протоколом https — URL валиден.")]
-  public void ValidateServiceUrl_HttpsUrl_ReturnsTrue()
+  [Description("Все адреса в строке корректны — формат совпадает.")]
+  public void IsEmailFormatMatch_AllEmailsValid_ReturnsTrue()
   {
     // Arrange
 
     // Act
-    var result = Sungero.Commons.Shared.GenAIServiceFunctions
-      .ValidateServiceUrl(@"https://serviceAI.my.ru/v1/chat/completions");
+    var result = Sungero.Commons.Shared.ModuleFunctions
+      .IsEmailFormatMatch("ivanov@my.ru; petrov@my.ru");
 
     // Assert
     Assert.That(result, Is.True);
   }
 
   [Test]
-  [Description("URL с обратными слэшами — URL невалиден.")]
-  public void ValidateServiceUrl_UrlWithBackSlashes_ReturnsFalse()
+  [Description("Один из адресов без домена — формат не совпадает.")]
+  public void IsEmailFormatMatch_EmailWithoutDomain_ReturnsFalse()
   {
     // Arrange
 
     // Act
-    var result = Sungero.Commons.Shared.GenAIServiceFunctions
-      .ValidateServiceUrl(@"http:\\serviceAI.my.ru\v1\chat\completions");
+    var result = Sungero.Commons.Shared.ModuleFunctions
+      .IsEmailFormatMatch("ivanov@my.ru; petrov@");
 
     // Assert
     Assert.That(result, Is.False);
@@ -839,8 +839,9 @@ Assert.That(LogManager.GetMessages(), Has.Some.Contains("was deleted"),
 
 ## Пример 13. Доступность действия
 
-```csharp
 Доступность действия проверяется тем же способом, что и его выполнение, только аргументы — CanExecuteActionArgs. Свойства сущности, которые нельзя задать присваиванием, подменяются через Mock.Get.
+
+```csharp
 using Moq;
 using Sungero.Docflow;
 using Sungero.Docflow.Client;
@@ -849,11 +850,11 @@ using Sungero.Domain.Shared;
 
 namespace UnitTests.Docflow.EntityActions.OfficialDocument;
 
-public class CanShowEntityAIProcessingInfo
+public class CanShowComparisonResult
 {
   [Test]
   [Description("Сохранённый документ с версией — действие доступно.")]
-  public void CanShowEntityAIProcessingInfo_SavedDocumentWithVersion_ActionIsAvailable()
+  public void CanShowComparisonResult_SavedDocumentWithVersion_ActionIsAvailable()
   {
     // Arrange
     var document = OfficialDocuments.Create();
@@ -870,7 +871,7 @@ public class CanShowEntityAIProcessingInfo
   [Test]
   [Description("Документ создан, но не сохранён — " +
     "действие недоступно.")]
-  public void CanShowEntityAIProcessingInfo_JustCreatedDocument_ActionIsNotAvailable()
+  public void CanShowComparisonResult_JustCreatedDocument_ActionIsNotAvailable()
   {
     // Arrange
     var document = OfficialDocuments.Create();
@@ -887,7 +888,7 @@ public class CanShowEntityAIProcessingInfo
   #region Helper методы
 
   /// <summary>
-  /// Проверить доступность действия «Показать результат проверки генеративным ИИ».
+  /// Проверить доступность действия «Показать результаты сравнения».
   /// </summary>
   /// <param name="document">Документ.</param>
   /// <returns>Признак доступности действия.</returns>
@@ -896,7 +897,7 @@ public class CanShowEntityAIProcessingInfo
     var actions = new OfficialDocumentActions();
     actions.SetEntity(document);
     var args = new CanExecuteActionArgs(FormType.Card, document);
-    return actions.CanShowEntityAIProcessingInfo(args);
+    return actions.CanShowComparisonResult(args);
   }
 
   #endregion
@@ -914,51 +915,51 @@ public class CanShowEntityAIProcessingInfo
 Изолированные функции лежат в отдельной сборке Sungero.{Модуль}.Isolated.dll, типы которой конфликтуют с одноимёнными типами прикладного модуля. Поэтому сборка подключается к тестовому проекту под псевдонимом:
 
 ```xml
-<Reference Include="$(AppliedModulesPath)\Sungero.GenAIProcessing.Isolated.dll">
-  <Aliases>GenAIProcessingIsolated</Aliases>
+<Reference Include="$(AppliedModulesPath)\Sungero.Docflow.Isolated.dll">
+  <Aliases>DocflowIsolated</Aliases>
 </Reference>
 ```
 
 Тест объявляет этот псевдоним и вызывает метод изолированной сборки рефлексией:
 
 ```csharp
-extern alias GenAIProcessingIsolated;
+extern alias DocflowIsolated;
 
 using System.Reflection;
-using GenAIProcessingIsolated::Sungero.GenAIProcessing.Isolated
-  .AIProcessingReportGenerator;
 using HarmonyLib;
 
-namespace UnitTests.GenAIProcessing.Isolated.AIProcessingReportGenerator
-  .PdfAIProcessingInfoGenerator;
+namespace UnitTests.Docflow.Isolated.DocumentTableParser
+  .DocumentTableParser;
 
-public class ParseResponse
+public class ContainsProblemGlyph
 {
   [Test]
-  [Description("Ответ ИИ не в формате JSON — разбор завершается ошибкой.")]
-  public void ParseResponse_NotJsonResponse_ThrowsArgumentException()
+  [Description("Текст содержит символ из области частного использования Unicode — текст считается проблемным.")]
+  public void ContainsProblemGlyph_PrivateUseCharacter_ReturnsTrue()
   {
     // Arrange
-    var data = "# Результат обработки";
+    var text = "Сумма  100";
 
     // Act
+    var result = CallMethod(text);
+
     // Assert
-    Assert.Throws<ArgumentException>(() => CallMethod(data));
+    Assert.That(result, Is.True);
   }
 
   #region Helper методы
 
-  private static ResponseDTO CallMethod(string response)
+  private static bool CallMethod(string text)
   {
     try
     {
       var method = AccessTools.Method(
-        typeof(GenAIProcessingIsolated::Sungero.GenAIProcessing.Isolated
-          .AIProcessingReportGenerator.ResponseProcessing),
-        "ParseResponse",
+        typeof(DocflowIsolated::Sungero.Docflow.Isolated
+          .DocumentTableParser.DocumentTableParser),
+        "ContainsProblemGlyph",
         [typeof(string)]);
 
-      return (ResponseDTO)method.Invoke(null, [response]);
+      return (bool)method.Invoke(null, [text]);
     }
     catch (TargetInvocationException ex)
     {

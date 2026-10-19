@@ -55,7 +55,6 @@
     <Reference Include="$(AppliedModulesPath)\Sungero.Docflow.Libraries\ArioExtensions\*.dll" />
     <Reference Include="$(AppliedModulesPath)\Sungero.ExchangeCore.Libraries\DCX\*.dll" />
     <Reference Include="$(AppliedModulesPath)\Sungero.FinancialArchive.Libraries\FDP\*.dll" />
-    <Reference Include="$(AppliedModulesPath)\Sungero.GenAIProcessing.Libraries\GenAIProcessingExtensions\*.dll" />
     <Reference Include="$(AppliedModulesPath)\Sungero.IntegrationAIAgent.Libraries\IntegrationAIExtensions\*.dll" />
     <Reference Include="$(AppliedModulesPath)\Sungero.Notifications.Libraries\MessageBrokerExtensions\*.dll" />
     <Reference Include="$(AppliedModulesPath)\Sungero.Parties.Libraries\CompanyData\*.dll" />
