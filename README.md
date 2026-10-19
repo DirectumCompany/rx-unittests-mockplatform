@@ -18,8 +18,6 @@
    <AppliedModulesPath>C:\Libs\Applied</AppliedModulesPath>
    ```
 
-   В папке прикладных сборок должна лежать и интерфейсная сборка `Sungero.Domain.Interfaces.dll`. В пакете разработки `BaseSolution.dat` её нет, она генерируется DeploymentTool той же версии: `DeploymentToolCore.exe -b <папка прикладных сборок> -d BaseSolution.dat`.
-
 3. Запустить тесты: `dotnet test rx-unittests-mockplatform.sln` или из Visual Studio.
 
 В CI пути удобнее передать параметрами: `-p:LibWebServerPath=... -p:AppliedModulesPath=...`.
