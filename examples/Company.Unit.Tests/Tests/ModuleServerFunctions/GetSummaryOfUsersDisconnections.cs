@@ -25,7 +25,7 @@ public class GetSummaryOfUsersDisconnections
 
         """";
 
-    Assert.That(result, Is.EqualTo(expected));
+    Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
   }
 
   [Test]
@@ -52,7 +52,7 @@ public class GetSummaryOfUsersDisconnections
 
         """";
 
-    Assert.That(result, Is.EqualTo(expected));
+    Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
   }
 
   [Test]
@@ -81,7 +81,7 @@ public class GetSummaryOfUsersDisconnections
 
         """";
 
-    Assert.That(result, Is.EqualTo(expected));
+    Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
   }
 
   [Test]
@@ -110,7 +110,7 @@ public class GetSummaryOfUsersDisconnections
         Успешно отключено: 2
 
         """";
-    Assert.That(result, Is.EqualTo(expected));
+    Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
   }
 
   [Test]
@@ -145,6 +145,6 @@ public class GetSummaryOfUsersDisconnections
 
         """";
 
-    Assert.That(result, Is.EqualTo(expected));
+    Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
   }
 }

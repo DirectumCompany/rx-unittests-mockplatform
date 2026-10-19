@@ -36,7 +36,7 @@ namespace UnitTests.Company.ModuleServerFunctions
 
         """";
 
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
 
     [Test]
@@ -76,7 +76,7 @@ namespace UnitTests.Company.ModuleServerFunctions
 
         """";
 
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
 
     [Test]
@@ -116,7 +116,7 @@ namespace UnitTests.Company.ModuleServerFunctions
 
         """";
 
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
 
     [Test]
@@ -155,7 +155,7 @@ namespace UnitTests.Company.ModuleServerFunctions
 
         """";
 
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
 
     [Test]
@@ -202,7 +202,7 @@ namespace UnitTests.Company.ModuleServerFunctions
         Успешно подключено: 2
 
         """";
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
 
     [Test]
@@ -265,7 +265,7 @@ namespace UnitTests.Company.ModuleServerFunctions
 
         """";
 
-      Assert.That(result, Is.EqualTo(expected));
+      Assert.That(result.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
     }
   }
 }
